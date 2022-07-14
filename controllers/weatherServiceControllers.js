@@ -1,16 +1,16 @@
 const express = require("express");
-
-const Weatherservice=require('./../models/weatherService')
-
-
+const Weather=require('../models/weatherService')
 const multer = require("multer");
-
 const path = require("path");
 const fs = require("fs");
 
 const app = express();
 
 
+
+ 
+ 
+ 
 const storage = multer.diskStorage({
   destination: "./assets/images/weatherServices",
 
@@ -43,13 +43,13 @@ const upload = multer({
   },
 });
 
-
+ 
 app.post("/", [upload.single("picture")], async (req, res) => {
   try {
     let data = req.body;
     let file = req.file;
 
-    let weatherservice = new Weatherservice({
+    let weatherservice = new Weather({
       name: data.name,
       description:data.description,
       image: file.filename,
@@ -65,7 +65,7 @@ app.post("/", [upload.single("picture")], async (req, res) => {
 
 app.get("/", async (req, res) => {
   try {
-    let weatherservice = await Weatherservice.find();
+    let weatherservice = await Weather.find();
     res.status(200).send(weatherservice);
   } catch (error) {
     res
@@ -74,12 +74,12 @@ app.get("/", async (req, res) => {
   }
 });
 
-
+ 
 app.get("/:id", async (req, res) => {
   try {
     let weatherserviceId = req.params.id;
 
-    let weatherservice = await weatherservice.findOne({ _id: weatherserviceId });
+    let weatherservice = await Weather.findOne({ _id: weatherserviceId });
 
     if (weatherservice) res.status(200).send(weatherservice);
     else res.status(404).send({ message: "weatherservice not found !" });
@@ -90,7 +90,7 @@ app.get("/:id", async (req, res) => {
   }
 });
 
-
+ 
 app.patch("/:id", [upload.single("picture")], async (req, res) => {
   try {
     let weatherserviceId = req.params.id;
@@ -98,11 +98,11 @@ app.patch("/:id", [upload.single("picture")], async (req, res) => {
 
     if (req.file) {
       data.image = req.file.filename;
-      let weatherservice = await Weatherservice.findOne({ _id: weatherserviceId });
-      fs.unlinkSync("assets/images/categories/" + category.image);
+      let weatherservice = await Weather.findOne({ _id: weatherserviceId });
+      fs.unlinkSync("assets/images/categories/" + weatherservice.image);
     }
 
-    let updatedweatherservice = await Weatherservice.findOneAndUpdate(
+    let updatedweatherservice = await Weather.findOneAndUpdate(
       { _id: weatherserviceId },
       data
     );
@@ -122,10 +122,10 @@ app.patch("/:id", [upload.single("picture")], async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     let weatherserviceId = req.params.id;
-    let weatherservice = await Category.findOneAndDelete({ _id: weatherserviceId });
-    let training = await Training.deleteMany({ idweatherservice: weatherserviceId });
+    let weatherservice = await Weather.findOneAndDelete({ _id: weatherserviceId });
+   // let training = await Training.deleteMany({ idweatherservice: weatherserviceId });
 
-    if (weatherservice && training)
+    if (weatherservice)
       res.status(200).send({ message: "weatherservice Deleted !" });
     else res.status(404).send({ message: "weatherservice not found !" });
   } catch (error) {
@@ -134,5 +134,5 @@ app.delete("/:id", async (req, res) => {
       .send({ message: "Error deleting categories !", error: error });
   }
 });
-
+ 
 module.exports = app;

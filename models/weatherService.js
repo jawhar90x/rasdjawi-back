@@ -6,7 +6,7 @@ const weatherserviceSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    desciption: {
+    description: {
       type: String,
       required: true,
       
@@ -19,4 +19,4 @@ const weatherserviceSchema = new mongoose.Schema({
 
 const Weatherservice = mongoose.model("weatherservice", weatherserviceSchema)
 
-module.exports = weatherservice
+module.exports = Weatherservice

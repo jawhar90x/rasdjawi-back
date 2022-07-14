@@ -7,9 +7,11 @@ const cors = require("cors")
 const mongoose = require("./config/db")
 
 // import controllers
+const weatherServiceControllers=require("./controllers/weatherServiceControllers")
 const usersControllers = require("./controllers/usersControllers")
 const smsServiceControllers = require("./controllers/smsServiceControllers")
 const messageControllers=require("./controllers/messageControllers")
+ 
 // creation d'un objet express .
 const app = express()
 const port = 3001
@@ -27,6 +29,7 @@ app.use(express.urlencoded({
 app.use(cors())
 
 // router
+app.use("/weatherservice",weatherServiceControllers)
 app.use("/users", usersControllers);
 app.use("/sms-service", smsServiceControllers)
 app.use("/message",messageControllers)

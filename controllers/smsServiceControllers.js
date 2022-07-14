@@ -23,5 +23,16 @@ app.post('/', async (req, res) => {
     }
 
 
+    app.get('/', async (req, res) => {
+        try {
+          let sms = await SmsService.find()
+          res.status(200).send(sms)
+        } catch (error) {
+          res.status(400).send({ sms: "Error fetching sdsdsusers !", error: error })
+        }
+      })
+
 })
+
+
 module.exports = app
